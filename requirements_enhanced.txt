@@ -1,0 +1,57 @@
+# requirements_enhanced.txt
+# Core deep learning
+torch>=2.0
+torchvision>=0.15
+torchaudio>=2.0
+timm>=0.9.0
+einops>=0.6.0
+
+# Video processing
+decord>=0.6.0
+opencv-python>=4.8.0
+av>=10.0.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+openai-whisper>=20230314  # For ASR
+pydub>=0.25.0
+
+# Text processing
+pytesseract>=0.3.10  # OCR
+opencv-python>=4.8.0  # For OCR preprocessing
+
+# Object detection
+ultralytics>=8.0.0  # YOLOv8
+# OR use torch.hub for YOLOv5
+
+# Vector search and indexing
+faiss-cpu>=1.7.4
+# For GPU: faiss-gpu>=1.7.4
+# For large scale: faiss-cpu with pip install faiss-gpu
+
+# Utilities
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+pyyaml>=6.0
+tqdm>=4.65.0
+pillow>=9.5.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Distributed computing (optional)
+# ray>=2.5.0  # For distributed processing
+# dask>=2023.5.0  # Alternative for distributed
+
+# Text embeddings (for semantic search)
+sentence-transformers>=2.2.0  # For text encoding
+transformers>=4.30.0  # Hugging Face models
+
+# API and serving (optional)
+# fastapi>=0.100.0
+# uvicorn>=0.23.0
+
+# Monitoring and logging
+tensorboard>=2.13.0
+wandb>=0.15.0  # Optional: for experiment tracking

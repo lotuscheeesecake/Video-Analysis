@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from torch.optim import AdamW
 from torch.cuda.amp import autocast, GradScaler
 from datasets import VideoFrameDataset
-from models import VideoKeywordModel
+from models import EnhancedVideoKeywordModel
 from utils import set_seed, load_labels, save_checkpoint
 from metrics import precision_at_k_batch, mean_average_precision
 import numpy as np

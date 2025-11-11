@@ -1,0 +1,185 @@
+# configs/config_enhanced.yaml
+
+# Dataset configuration
+dataset:
+  manifest: "./data/manifest.csv"
+  num_frames: 32  # Increased for better temporal coverage
+  image_size: 224
+  frame_sampling: "uniform"  # uniform, random, or adaptive
+  
+  # Audio settings
+  audio_sample_rate: 16000
+  audio_n_mels: 128
+  audio_duration: 10.0  # seconds
+  
+  # Multimodal flags
+  use_audio: true
+  use_text: true
+  use_ocr: true
+
+# Model architecture
+model:
+  # Visual backbone
+  visual_backbone: "vit_base_patch16_224"  # or resnet50, efficientnet_b0
+  
+  # Temporal modeling
+  temporal_model: "transformer"  # transformer, slowfast, or i3d
+  temporal_dim: 768
+  temporal_layers: 6
+  temporal_heads: 12
+  
+  # Use SlowFast architecture
+  use_slowfast: false
+  slowfast_slow_frames: 8
+  slowfast_fast_frames: 32
+  
+  # Audio processing
+  audio_feature_dim: 512
+  
+  # Text processing
+  text_model: "sentence-transformers/all-MiniLM-L6-v2"
+  text_feature_dim: 384
+  
+  # Multimodal fusion
+  fusion_dim: 768
+  fusion_layers: 4
+  
+  # Task heads
+  num_object_classes: 80    # COCO
+  num_action_classes: 400   # Kinetics
+  num_scene_classes: 365    # Places365
+  num_keywords: 300         # Your custom keywords
+  
+  # Semantic embedding for retrieval
+  semantic_embedding_dim: 512
+
+# Training configuration
+training:
+  batch_size: 4  # Reduced due to multimodal complexity
+  epochs: 20
+  lr: 5e-5
+  weight_decay: 0.01
+  warmup_steps: 500
+  grad_accum_steps: 4  # Effective batch size = 16
+  
+  # Loss weights for multi-task learning
+  loss_weights:
+    objects: 1.0
+    actions: 1.0
+    scenes: 0.5
+    keywords: 1.0
+    contrastive: 0.5  # For embedding space
+  
+  # Optimization
+  optimizer: "adamw"  # or adam, sgd
+  scheduler: "cosine"  # cosine, linear, or constant
+  max_grad_norm: 1.0
+  
+  # Mixed precision training
+  use_amp: true
+  
+  # Checkpointing
+  save_path: "./checkpoints_enhanced"
+  save_every: 1  # epochs
+  keep_best_k: 3
+  
+  # Device
+  device: "cuda"
+  num_workers: 8
+  pin_memory: true
+
+# Object detection and tracking
+detection:
+  model: "yolov8n"  # yolov8n, yolov8s, yolov8m
+  conf_threshold: 0.5
+  iou_threshold: 0.5
+  track_objects: true
+  max_tracks: 50
+
+# Audio processing
+audio:
+  use_whisper: true
+  whisper_model: "base"  # tiny, base, small, medium, large
+  detect_audio_events: true
+  extract_audio_features: true
+
+# Text/OCR processing
+text:
+  enable_ocr: true
+  ocr_language: "eng"
+  ocr_confidence_threshold: 0.5
+  sample_frames_for_ocr: 10  # Sample every N frames
+
+# Inference configuration
+inference:
+  batch_size: 1
+  threshold: 0.3
+  topk: 10
+  use_tta: false  # Test-time augmentation
+  
+  # For semantic search
+  search_k: 20
+  rerank: true
+
+# Semantic search index
+indexing:
+  embedding_dim: 512
+  index_type: "IndexFlatIP"  # IndexFlatIP, IndexIVFFlat, IndexHNSW
+  index_save_dir: "./video_index"
+  
+  # For large-scale (IVF)
+  ivf_nlist: 100
+  ivf_nprobe: 10
+  
+  # Metadata storage
+  metadata_backend: "pickle"  # pickle, sqlite, or mongodb
+
+# Distributed processing (optional)
+distributed:
+  enabled: false
+  backend: "nccl"  # nccl or gloo
+  num_gpus: 1
+  world_size: 1
+
+# Logging and monitoring
+logging:
+  log_dir: "./logs"
+  tensorboard: true
+  wandb: false
+  wandb_project: "video-analysis"
+  log_every: 10  # batches
+  
+# Evaluation
+evaluation:
+  metrics:
+    - "precision_at_k"
+    - "mean_average_precision"
+    - "recall_at_k"
+    - "ndcg"
+  k_values: [1, 5, 10, 20]
+  
+  # Separate validation set
+  val_manifest: "./data/val_manifest.csv"
+  val_split: 0.1
+
+# Data augmentation
+augmentation:
+  spatial:
+    random_crop: true
+    random_flip: true
+    color_jitter: true
+    random_rotation: false
+  
+  temporal:
+    random_temporal_crop: true
+    temporal_stride_range: [1, 4]
+  
+  audio:
+    random_volume: true
+    add_noise: false
+
+# Misc
+misc:
+  seed: 42
+  deterministic: false
+  benchmark: true  # cudnn.benchmark for faster training
