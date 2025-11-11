@@ -255,7 +255,7 @@ class ObjectDetectionTracker:
         return inter_area / union_area if union_area > 0 else 0.0
 
 
-class ComprehensiveVideoPipeline:
+class VideoPipeline:
     """
     Main pipeline orchestrating all processing steps
     """
@@ -370,7 +370,7 @@ def process_and_analyze(video_path: str, model, device='cuda'):
     """
     Complete end-to-end processing and analysis
     """
-    pipeline = ComprehensiveVideoPipeline()
+    pipeline = VideoPipeline()
     
     # Process video through pipeline
     results = pipeline.process_video(video_path)

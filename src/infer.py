@@ -3,7 +3,7 @@ import argparse
 import yaml
 import torch
 import numpy as np
-from models import EnhancedVideoKeywordModel
+from models import VideoKeywordModel
 from datasets import VideoFrameDataset
 from utils import load_labels
 from decord import VideoReader, cpu

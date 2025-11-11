@@ -12,7 +12,7 @@ from pathlib import Path
 import sys
 sys.path.append('src')
 
-from models_enhanced import ComprehensiveVideoAnalysisModel, EnhancedVideoKeywordModel
+from models import VideoAnalysisModel, VideoKeywordModel
 from search_indexing import VideoIndexingPipeline, VideoSemanticIndex
 from utils import load_labels, set_seed
 
@@ -21,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Build video search index")
     parser.add_argument("--video_dir", type=str, required=True, help="Directory containing videos")
     parser.add_argument("--model_path", type=str, required=True, help="Path to trained model checkpoint")
-    parser.add_argument("--config", type=str, default="configs/config_enhanced.yaml", help="Config file")
+    parser.add_argument("--config", type=str, default="configs/config.yaml", help="Config file")
     parser.add_argument("--output_dir", type=str, default="./video_index", help="Output directory for index")
     parser.add_argument("--device", type=str, default="cuda", help="Device to use")
     parser.add_argument("--batch_process", action="store_true", help="Process videos in batches")
@@ -32,7 +32,7 @@ def load_model(cfg, model_path, device):
     """Load trained model from checkpoint"""
     # Determine which model to use
     if cfg.get('model', {}).get('use_slowfast', False):
-        model = ComprehensiveVideoAnalysisModel(
+        model = VideoAnalysisModel(
             num_object_classes=cfg['model']['num_object_classes'],
             num_action_classes=cfg['model']['num_action_classes'],
             num_scene_classes=cfg['model']['num_scene_classes'],
@@ -42,7 +42,7 @@ def load_model(cfg, model_path, device):
             fusion_dim=cfg['model']['fusion_dim']
         )
     else:
-        model = EnhancedVideoKeywordModel(
+        model = VideoKeywordModel(
             vit_name=cfg['model']['visual_backbone'],
             num_labels=cfg['model']['num_keywords'],
             temporal_dim=cfg['model']['temporal_dim'],

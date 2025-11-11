@@ -358,11 +358,11 @@ class VideoIndexingPipeline:
         device='cuda',
         index_save_dir='./video_index'
     ):
-        from pipeline import ComprehensiveVideoPipeline
+        from pipeline import VideoPipeline
         
         self.model = model
         self.device = device
-        self.pipeline = ComprehensiveVideoPipeline()
+        self.pipeline = VideoPipeline()
         self.semantic_index = VideoSemanticIndex(embedding_dim=512)
         self.index_save_dir = index_save_dir
     

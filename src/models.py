@@ -1,4 +1,4 @@
-# src/models_enhanced.py
+# src/models.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -223,7 +223,7 @@ class MultiModalFusionTransformer(nn.Module):
         return fused_global
 
 
-class ComprehensiveVideoAnalysisModel(nn.Module):
+class VideoAnalysisModel(nn.Module):
     """
     Complete SOTA video analysis model with:
     - Spatial feature extraction (objects, scenes)
